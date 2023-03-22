@@ -1,0 +1,82 @@
+--@DEPENDS:.base
+
+
+--@TABLE  norom
+create table utilsu.test_dirs(
+    path text not null,
+    filename text not null,
+    size bigint default 0, 
+    access timestamptz default now(), 
+    modification timestamptz default now(), 
+    change timestamptz default now(), 
+    creation timestamptz default now(), 
+    isdir boolean default true,
+    primary key(path,filename)
+  );
+--@END
+
+
+--@FUNCTION norom ver=1
+create function utilsu.ls_dir(p_path text) returns setof text as $$
+declare
+	v_ret pg_settings;
+begin
+ 	select * into v_ret from su_test();
+ 	if not found then
+ 		return query select pg_ls_dir(p_path);
+ 	end if;
+
+	return query select filename from utilsu.test_dirs where path=p_path;
+end;
+$$ language 'plpgsql';
+--@END
+
+--@FUNCTION norom ver=1
+create function utilsu.stat_file(p_path text) returns utilsu.test_dirs as $$
+declare
+	v_ret utilsu.test_dirs;
+	v_d pg_settings;
+begin
+ 	select * into v_d from su_test();
+ 	if not found then
+ 		select '','',* into v_ret from pg_stat_file(p_path, true);
+ 	else
+ 		select * into v_ret 
+ 			from utilsu.test_dirs 
+ 			where p_path=path||'/'||filename;
+ 	end if;
+
+	return v_ret;
+end;
+$$ language 'plpgsql';
+--@END
+
+
+
+--@RUN utest
+
+select assert_equals(1, (select 1));
+
+select assert_equals(1, (select count(*) from su_test()));
+
+insert into utilsu.test_dirs (path,filename) values ('/hdfs', 'VTM_masak');
+insert into utilsu.test_dirs (path,filename) values ('/hdfs/VTM_masak', 'NKR_FULL');
+insert into utilsu.test_dirs (path,filename) values ('/hdfs/VTM_masak','20230210_16071676034461');
+insert into utilsu.test_dirs (path,filename) values ('/hdfs/VTM_masak','20230213_17161676297817');
+insert into utilsu.test_dirs (path,filename) values ('/hdfs/VTM_masak/20230213_17161676297817', 'first_NKR_update');
+insert into utilsu.test_dirs (path,filename) values ('/hdfs/VTM_masak/20230213_17161676297817', 'second_NKR_load');
+
+insert into utilsu.test_dirs (path,filename, size, isdir) 
+	values ('/hdfs/VTM_masak/NKR_FULL', 'part-00000-6ba63a88-d38d-4dcf-87f7-cd8c91962d61-c000.csv', 10842647532,false);
+insert into utilsu.test_dirs (path,filename, size, isdir) 
+	values ('/hdfs/VTM_masak/NKR_FULL', 'part-00001-6ba63a88-d38d-4dcf-87f7-cd8c91962d61-c000.csv', 10842647532,false);
+insert into utilsu.test_dirs (path,filename, size, isdir) 
+	values ('/hdfs/VTM_masak/NKR_FULL', '_SUCCESS', 0,false);
+
+select assert_equals(3 ,(select count(*) from utilsu.ls_dir('/hdfs/VTM_masak')));
+
+select assert_true((select isdir from utilsu.stat_file('/hdfs/VTM_masak')));
+
+select assert_equals(10842647532, (select size from utilsu.stat_file('/hdfs/VTM_masak/NKR_FULL/part-00001-6ba63a88-d38d-4dcf-87f7-cd8c91962d61-c000.csv')));
+
+--@END
