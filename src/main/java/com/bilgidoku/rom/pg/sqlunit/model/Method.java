@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.bilgidoku.rom.base.java.min.json.JSONArray;
 import com.bilgidoku.rom.base.min.Sistem;
 import com.bilgidoku.rom.base.min.gorevli.Ortam;
 import com.bilgidoku.rom.pg.dict.AfterHook;
@@ -38,17 +39,19 @@ import com.bilgidoku.rom.pg.sqlunit.SuException;
 import com.bilgidoku.rom.pg.sqlunit.parsing.CompParser;
 import com.bilgidoku.rom.pg.sqlunit.rom.RomComp;
 
-public class Method extends SuComp implements CGMethod, CallMethod{
+public class Method extends SuComp implements CGMethod, CallMethod {
 	final private String schema;
 	final private String table;
 	final String named;
 
 	private boolean forObject = true;
-	private String[] auditParams=null;
+	private String[] auditParams = null;
 
 	private String http = "get";
 
 	private Set<String> roles = new HashSet<String>();
+	private Set<String> tags = new HashSet<String>();
+	private String nature = null;
 	private String args;
 	private String after = null;
 	private String before = null;
@@ -62,35 +65,33 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 	private int[] retColumnTypes;
 	private boolean isRetSet;
 	private TypeHolder retType;
-	
-	private boolean hasFileParam=false;
-	private boolean retFile=false;
-	private boolean cantBeInline=true;
-	
+
+	private boolean hasFileParam = false;
+	private boolean retFile = false;
+	private boolean cantBeInline = true;
+
 	private String tablePrefix;
-	
+
 	private String hsc;
 	private String one;
 	private String net;
-	private String accesslevel="read";
+	private String accesslevel = "read";
 	private String inherit;
-	
+
 	private Long cache;
-	private int cpu=100;
+	private int cpu = 100;
 	private CookieFinder cf;
 	private String[] menu;
-
 
 	@Override
 	public boolean cantBeInline() {
 		return cantBeInline;
 	}
-	
-	public Method(CookieFinder cf, SqlUnit su, String schema, String table, String named,
-			String args, boolean unitTest, int lineNo, boolean isRetSet,
-			TypeHolder retType) {
+
+	public Method(CookieFinder cf, SqlUnit su, String schema, String table, String named, String args, boolean unitTest,
+			int lineNo, boolean isRetSet, TypeHolder retType) {
 		super(su, true, unitTest, lineNo, false);
-		this.cf=cf;
+		this.cf = cf;
 		this.schema = schema;
 		this.table = table;
 		this.named = named;
@@ -100,7 +101,8 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 	}
 
 	public void init(CompParser parser) throws SuException {
-		this.cantBeInline=(beforeHook!=null || afterHook!=null || !http.equals("get") || isRetFile() || hasFileParam||isVoid());
+		this.cantBeInline = (beforeHook != null || afterHook != null || !http.equals("get") || isRetFile()
+				|| hasFileParam || isVoid());
 		initHooks();
 		initArgMappers(parser);
 		this.callProto = makeCallProto(schema, table, named);
@@ -133,7 +135,8 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 			// sqlType = parser.getType(methodCol.sqlType.getTypeStr()[0]);
 			// if(sqlType==null){
 			// throw new
-			// RuntimeException("Type:"+methodCol.sqlType.getTypeStr()[0]+" not found while parsing method:"+table+"."+named);
+			// RuntimeException("Type:"+methodCol.sqlType.getTypeStr()[0]+" not found while
+			// parsing method:"+table+"."+named);
 			// }
 			switch (argType) {
 			case 'a':
@@ -141,35 +144,41 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 					ams[i] = new SelfMapper(index, canBeNull);
 				} else if (varName.equals("host")) {
 					ams[i] = new HostMapper(index, false);
+				} else if (varName.equals("user")) {
+					ams[i] = new HostMapper(index, false);
+				} else if (varName.equals("user_id")) {
+					ams[i] = new HostMapper(index, false);
 				} else if (varName.equals("lang")) {
-					ams[i] = new LangMapper(cf,index);
+					ams[i] = new LangMapper(cf, index);
 				} else if (varName.equals("contact")) {
 					ams[i] = new ContactMapper(index, canBeNull);
 				} else if (varName.equals("contactno")) {
 					ams[i] = new ContactNoMapper(index, canBeNull);
 				} else if (varName.equals("roles")) {
 					ams[i] = new RolesMapper(index, canBeNull);
+				} else if (varName.equals("tags")) {
+					ams[i] = new RolesMapper(index, canBeNull);
+				} else if (varName.equals("nature")) {
+					ams[i] = new RolesMapper(index, canBeNull);
 				} else if (varName.equals("remote_addr")) {
 					ams[i] = new RemoteAddrMapper(index, canBeNull);
 				} else if (varName.equals("iscont")) {
 					ams[i] = new RemoteAddrMapper(index, canBeNull);
-				}else if (varName.equals("sid")) {
+				} else if (varName.equals("sid")) {
 					ams[i] = new SidMapper(index, canBeNull);
-				}else {
-					throw new SuException("",0,schema+"."+table+" Unknown argument prefix 'a' for :"+argName);
+				} else {
+					throw new SuException("", 0, schema + "." + table + " Unknown argument prefix 'a' for :" + argName);
 				}
 				break;
 			case 'h':
 				String headerName = varName.replace('_', '-');
-				ams[i] = new HeaderMapper(index, headerName,
-						field.getTypeHolder(), canBeNull);
+				ams[i] = new HeaderMapper(index, headerName, field.getTypeHolder(), canBeNull);
 				break;
 			case 'c':
 				ams[i] = new CookieMapper(cf, index, varName, canBeNull);
 				break;
 			case 'p':
-				ams[i] = new ParamMapper(index, varName, field.getTypeHolder(),
-						canBeNull);
+				ams[i] = new ParamMapper(index, varName, field.getTypeHolder(), canBeNull);
 				break;
 			case 'f':
 				throw new RuntimeException("FileMapper not implemented");
@@ -178,23 +187,23 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 //				hasFileParam=true;
 //				break;
 			default:
-				throw new SuException("",0,schema+"."+table+" Unknown argument prefix 'a' for :"+argName);
+				throw new SuException("", 0, schema + "." + table + " Unknown argument prefix 'a' for :" + argName);
 			}
 		}
 		argMappers = ams;
 	}
 
 	private void initHooks() {
-		if(!Ortam.tek().integrationTest)
+		if (!Ortam.tek().integrationTest)
 			return;
-		
+
 		if (before != null) {
 			try {
 				@SuppressWarnings("unchecked")
 				Class<BeforeHook> c = (Class<BeforeHook>) Class.forName(before);
 				beforeHook = c.newInstance();
 				beforeHook.initialize(this);
-			} catch( ClassNotFoundException e){
+			} catch (ClassNotFoundException e) {
 				beforeHook = null;
 				Sistem.printStackTrace(e);
 			} catch (InstantiationException | IllegalAccessException e) {
@@ -210,20 +219,19 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 				Class<AfterHook> c = (Class<AfterHook>) Class.forName(after);
 				afterHook = c.newInstance();
 				afterHook.initialize(this);
-			} catch( ClassNotFoundException e){
+			} catch (ClassNotFoundException e) {
 				afterHook = null;
 				Sistem.printStackTrace(e);
 			} catch (InstantiationException | IllegalAccessException e) {
 				Sistem.printStackTrace(e);
 				throw new RuntimeException(e);
-			} 
+			}
 		} else {
 			afterHook = null;
 		}
 	}
 
-	private String makeCallProto(String schemaName, String tableName,
-			String methodName) {
+	private String makeCallProto(String schemaName, String tableName, String methodName) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("select * from ");
 		sb.append(schemaName);
@@ -238,7 +246,7 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 				sb.append(",");
 			sb.append("?");
 //			sb.append(argMappers[i].callProto());
-			
+
 			String cnv = argMappers[i].getConversion();
 			if (cnv != null) {
 				sb.append("::");
@@ -281,28 +289,21 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 	}
 
 	public boolean isColumnInteger(int i) {
-		return this.retColumnTypes[i] == Types.SMALLINT
-				|| this.retColumnTypes[i] == Types.INTEGER
+		return this.retColumnTypes[i] == Types.SMALLINT || this.retColumnTypes[i] == Types.INTEGER
 				|| this.retColumnTypes[i] == Types.BIGINT;
 	}
 
 	public boolean isColumnDouble(int i) {
-		return this.retColumnTypes[i] == Types.DOUBLE
-				|| this.retColumnTypes[i] == Types.FLOAT;
+		return this.retColumnTypes[i] == Types.DOUBLE || this.retColumnTypes[i] == Types.FLOAT;
 	}
 
 	public boolean equals(Object object) {
-		if (object == null
-				|| !(object instanceof com.bilgidoku.rom.pg.sqlunit.model.Method)) {
+		if (object == null || !(object instanceof com.bilgidoku.rom.pg.sqlunit.model.Method)) {
 			return false;
 		}
 		Method m = (Method) object;
-		if (m.schema.equals(this.schema)
-				&& m.table.equals(this.table)
-				&& m.named.equals(this.named)
-				&& m.roles.equals(this.roles)
-				&& m.http.equals(this.http)
-				&& m.isRetSet == this.isRetSet
+		if (m.schema.equals(this.schema) && m.table.equals(this.table) && m.named.equals(this.named)
+				&& m.roles.equals(this.roles) && m.http.equals(this.http) && m.isRetSet == this.isRetSet
 				&& m.getRetType().equals(this.getRetType())
 				&& ((m.before != null && m.before.equals(this.before)) || (m.before == null && this.before == null))
 				&& ((m.after != null && m.after.equals(this.after)) || (m.after == null && this.after == null))
@@ -313,10 +314,9 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 	}
 
 	public String toString() {
-		return "Method:" + schema + "." + table + "." + named + args
-				+ " forObject:" + forObject + " http:" + http + " roles:"
-				+ roles.toString() + " before:" + this.before + " after:"
-				+ this.after + "retSet:"+isRetSet;
+		return "Method:" + schema + "." + table + "." + named + args + " forObject:" + forObject + " http:" + http
+				+ " roles:" + roles.toString() + " before:" + this.before + " after:" + this.after + "retSet:"
+				+ isRetSet;
 	}
 
 	public String getSchema() {
@@ -331,6 +331,14 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 		return named;
 	}
 
+	public void addTag(String tag) {
+		this.tags.add(tag);
+	}
+
+	public Set<String> getTags() {
+		return tags;
+	}
+	
 	public void addRole(String role) {
 		this.roles.add(role);
 	}
@@ -347,6 +355,15 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 		this.http = http;
 	}
 
+	@Override
+	public String getNature() {
+		return nature;
+	}
+
+	public void setNature(String nature) {
+		this.nature = nature;
+	}
+	
 	@Override
 	public boolean isSql() {
 		return true;
@@ -378,8 +395,9 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 
 	@Override
 	public RomComp getComp() {
-		return new RomComp("function", this.schema, table
-				+ "_" + named, this.getVersion(), isNoRom(), null, null);
+		String sr=(roles==null?null:new JSONArray(roles).toString());
+		String st=(tags==null?null:new JSONArray(tags).toString());
+		return new RomComp("function", this.schema, table + "_" + named, this.getVersion(), isNoRom(), null, null, sr, nature, st);
 	}
 
 	@Override
@@ -387,10 +405,9 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 		List<Command> upgradeCmds = super.upgrade(dbVer);
 		for (Command command : getCommands()) {
 			Command c = command.clone();
-			c.setCommand(c.getCommand().replaceAll("create function",
-					"create or replace function"));
+			c.setCommand(c.getCommand().replaceAll("create function", "create or replace function"));
 			upgradeCmds.add(c);
-			
+
 //			Command c=command.clone();
 //			StringBuilder sb=new StringBuilder();
 //			sb.append("select dropfunction('");
@@ -421,8 +438,6 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 		return argMappers;
 	}
 
-
-
 	// public boolean getRetset() {
 	// return isRetSet;
 	// }
@@ -436,7 +451,6 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 	public String getNameJavaFormFirstUpper() {
 		return capitalize(getNameJavaForm());
 	}
-
 
 	public static String capitalize(String s) {
 		if (s.length() == 0)
@@ -455,12 +469,11 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 		}
 
 		if (!isBreed()) {
-			params.add(new Field("self", new TextType(), false, 0,false, null));
+			params.add(new Field("self", new TextType(), false, 0, false, null));
 		}
 
 		return params;
 	}
-
 
 	public List<CGAtt> getServerArgs() {
 		List<CGAtt> params = new ArrayList<CGAtt>();
@@ -470,13 +483,10 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 		return params;
 	}
 
-	
-
-
 	public String getHttpUp() {
 		return this.http.toUpperCase();
 	}
-	
+
 	public boolean isHasFileParam() {
 		return hasFileParam;
 	}
@@ -492,9 +502,9 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 	public void setRetType(TypeHolder retType) {
 		this.retType = retType;
 	}
-	
-	public boolean isVoid(){
-		return this.retType.getSqlType()==VoidType.one;
+
+	public boolean isVoid() {
+		return this.retType.getSqlType() == VoidType.one;
 	}
 
 	public boolean returnsPrimitive() {
@@ -502,13 +512,13 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 	}
 
 ////////////////////////////////////////////////////////
-	
+
 	public String getNameJavaForm() {
 		if (named.equals("new"))
 			return "neww";
 		return named;
 	}
-	
+
 	public boolean getHasArgs() {
 		return this.getArgs().size() != 0;
 	}
@@ -524,11 +534,10 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 	public String getTableName() {
 		return table;
 	}
-	
+
 	public boolean getHasParams() {
 		return this.getParams().size() != 0;
 	}
-	
 
 	public int getParamCount() {
 		return this.getParams().size();
@@ -545,12 +554,13 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 		}
 
 		if (isBreed()) {
-			params.add(new Field("schema", new TextType(), false, 0,false, null));
-			params.add(new Field("table", new TextType(), false, 0,false, null));
+			params.add(new Field("schema", new TextType(), false, 0, false, null));
+			params.add(new Field("table", new TextType(), false, 0, false, null));
 		}
 
 		return params;
 	}
+
 	public boolean getFormPosting() {
 		return this.http.equalsIgnoreCase("post");
 	}
@@ -558,7 +568,7 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 	public boolean getFormDeleting() {
 		return this.http.equalsIgnoreCase("delete");
 	}
-	
+
 	public String getUriPostfix() {
 		if (named.equals("new") || named.equals("breed")) {
 			return "/new.rom";
@@ -579,15 +589,16 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 	}
 
 	public void setRetFile(boolean b) {
-		this.retFile=true;
+		this.retFile = true;
 	}
+
 	public boolean isRetFile() {
 		return retFile;
 	}
 
 	@Override
 	public boolean isHook() {
-		return this.before!=null || this.after!=null;
+		return this.before != null || this.after != null;
 	}
 
 	@Override
@@ -632,18 +643,18 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 
 	@Override
 	public String getUri() {
-		return tablePrefix+getUriPostfix();
+		return tablePrefix + getUriPostfix();
 	}
-	
-	public void setTablePrefix(String prefix){
-		this.tablePrefix=prefix;
+
+	public void setTablePrefix(String prefix) {
+		this.tablePrefix = prefix;
 	}
 
 	@Override
 	public String getCapTableName() {
 		return capitalize(table);
 	}
-	
+
 	public String getHsc() {
 		return hsc;
 	}
@@ -675,15 +686,15 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 
 	@Override
 	public String getRoleStr() {
-		if(roles==null||roles.size()==0)
+		if (roles == null || roles.size() == 0)
 			return "";
-		StringBuilder sb=new StringBuilder();
-		boolean virgul=false;
+		StringBuilder sb = new StringBuilder();
+		boolean virgul = false;
 		for (String it : roles) {
-			if(virgul)
+			if (virgul)
 				sb.append(",");
 			else
-				virgul=true;
+				virgul = true;
 			sb.append("\"");
 			sb.append(it);
 			sb.append("\"");
@@ -697,38 +708,38 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 	}
 
 	public void setAudits(String[] as) {
-		this.auditParams=as;
+		this.auditParams = as;
 //		if(auditParams==null){
 //			com.bilgidoku.rom.gunluk.Sistem.outln("null");
 //		}
 	}
-	
-	public boolean getAudit(){
-		return auditParams!=null;
+
+	public boolean getAudit() {
+		return auditParams != null;
 	}
-	
-	public String[] getAuditparams(){
+
+	public String[] getAuditparams() {
 		return auditParams;
 	}
-	
-	public String getAuditname(){
-		return this.schema+"."+this.table+"."+named;
+
+	public String getAuditname() {
+		return this.schema + "." + this.table + "." + named;
 	}
-	
-	public boolean getHasAuditParam(){
-		if(auditParams==null)
+
+	public boolean getHasAuditParam() {
+		if (auditParams == null)
 			return false;
 		return true;
 	}
-	
-	public String getAuditparamnames(){
-		if(auditParams==null || auditParams.length==0){
+
+	public String getAuditparamnames() {
+		if (auditParams == null || auditParams.length == 0) {
 			return null;
 		}
-		
-		StringBuilder sb=new StringBuilder();
-		for(int i=0; i<auditParams.length; i++){
-			if(i!=0)
+
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < auditParams.length; i++) {
+			if (i != 0)
 				sb.append(",");
 			sb.append('"');
 			sb.append(auditParams[i].substring(2));
@@ -738,7 +749,7 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 	}
 
 	public void setAccesslevel(String string) {
-		this.accesslevel=string;
+		this.accesslevel = string;
 	}
 
 	public String getAccesslevel() {
@@ -760,7 +771,7 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 	public void setCache(Long cache) {
 		this.cache = cache;
 	}
-	
+
 	public String[] getMenu() {
 		return menu;
 	}
@@ -770,9 +781,10 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 	}
 
 	public void setCpu(int cpu) {
-		this.cpu=cpu;
+		this.cpu = cpu;
 	}
-	public int getCpu(){
+
+	public int getCpu() {
 		return this.cpu;
 	}
 
@@ -785,20 +797,18 @@ public class Method extends SuComp implements CGMethod, CallMethod{
 	public boolean isReturnJust() {
 		return false;
 	}
-	
-	
 
 	public List<Command> genAbstract() {
-		StringBuilder sb=new StringBuilder();
+		StringBuilder sb = new StringBuilder();
 		sb.append("select dropfunction('");
 		sb.append(this.schema);
 		sb.append("','");
 		sb.append(named);
 		sb.append("');");
-		
+
 		List clone = (List) ((LinkedList) getCommands()).clone();
-		clone.add(0, new Command(sb.toString(),0));
-		
+		clone.add(0, new Command(sb.toString(), 0));
+
 		return clone;
 	}
 }

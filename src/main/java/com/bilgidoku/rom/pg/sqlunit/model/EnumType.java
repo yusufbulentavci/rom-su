@@ -51,7 +51,7 @@ public class EnumType extends TypeComp{
 
 	@Override
 	public RomComp getComp() {
-		return new RomComp("type", this.getSchema(), name, this.getVersion(), true, null, null);
+		return new RomComp("type", this.getSchema(), name, this.getVersion(), true, null, null, null, null, null);
 	}
 
 	public String getSchema() {

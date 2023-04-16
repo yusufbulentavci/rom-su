@@ -389,7 +389,9 @@ public class SqlUnitParser {
 			sb.append(nextString);
 		} while (true);
 		lineReader.reset();
-//		System.out.println("ret2");
+		System.out.println("->-");
+		System.out.println(sb.toString());
+		System.out.println("-<-");
 
 		return sb.toString();
 		//return macros.replaceMacro(sb.toString());

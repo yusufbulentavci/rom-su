@@ -225,6 +225,10 @@ public class SqlUnitGorevlisi extends GorevliDir {
 				String sql = command.getCommand();
 				pw.println(sql);
 				if (command.isSql()) {
+					System.out.println("Sql:");
+					System.out.println(sql);
+					System.out.println("Sql:");
+					
 					rcd.executeCommand(sql);
 					if (sql.startsWith("create table dict.envo(")) {
 						sql = "insert into dict.envo(testing)" + " values(" + Ortam.tek().isTest() + ")";

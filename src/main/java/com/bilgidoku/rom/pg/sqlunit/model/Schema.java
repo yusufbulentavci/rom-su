@@ -74,7 +74,7 @@ public class Schema extends SuComp {
 
 	@Override
 	public RomComp getComp() {
-		return new RomComp("schema", this.schema, "", this.getVersion(), true, null, null);
+		return new RomComp("schema", this.schema, "", this.getVersion(), true, null, null, null, null, null);
 	}
 
 	public void addTable(Table t) {

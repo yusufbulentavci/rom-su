@@ -26,10 +26,11 @@ public class RomCompDao {
 	final DbThree db3;
 
 	public RomCompDao(VeritabaniGorevlisi vg) throws KnownError {
-		db3 = new DbThree(vg, "create table if not exists public.romcomp(" + "comptype text not null,"
-				+ "schemaname text not null,"
-				+ "named text not null, ver int not null, norom boolean not null, uzanti text, dokun text, primary key (comptype,schemaname,named)"
-				+ ")");
+		db3 = new DbThree(vg,
+				"create table if not exists public.romcomp(" + "comptype text not null," + "schemaname text not null,"
+						+ "named text not null, ver int not null, norom boolean not null, uzanti text, "
+						+ "dokun text, " + "roles jsonb, " + "nature text, " + "tags jsonb, "
+						+ "primary key (comptype,schemaname,named)" + ")");
 		db3.setTransactional();
 	}
 
@@ -48,7 +49,11 @@ public class RomCompDao {
 
 		db3.replaceQuery(
 				"create table if not exists public.romcomp(" + "comptype text not null," + "schemaname text not null,"
-						+ "named text not null," + "ver int not null,norom boolean not null, uzanti text, dokun text,"
+						+ "named text not null," + "ver int not null,norom boolean not null, uzanti text, "
+						+ "dokun text," 
+						+ "roles jsonb, "
+						+ "nature text, "
+						+ "tags jsonb, "
 						+ "primary key (comptype,schemaname,named)" + ")");
 		db3.execute();
 
@@ -58,7 +63,7 @@ public class RomCompDao {
 		while (db3.next()) {
 
 			RomComp rc = new RomComp(db3.getString(), db3.getString(), db3.getString(), db3.getInt(), db3.getBoolean(),
-					db3.getString(), db3.getString());
+					db3.getString(), db3.getString(), db3.getString(), db3.getString(), db3.getString());
 			comps.put(rc.getId(), rc);
 		}
 		return comps;
@@ -86,6 +91,9 @@ public class RomCompDao {
 		String sql = "create table if not exists public.romcomp(" + "comptype text not null,"
 				+ "schemaname text not null," + "named text not null,"
 				+ "ver int not null,norom boolean not null, uzanti text,dokun text,"
+				+ "roles jsonb, "
+				+ "nature text, "
+				+ "tags jsonb, "
 				+ "primary key (comptype,schemaname,named)" + ")";
 		pw.println(sql);
 		db3.replaceQuery(sql);
@@ -98,7 +106,7 @@ public class RomCompDao {
 		while (db3.next()) {
 
 			RomComp rc = new RomComp(db3.getString(), db3.getString(), db3.getString(), db3.getInt(), db3.getBoolean(),
-					db3.getString(), db3.getString());
+					db3.getString(), db3.getString(), db3.getString(),db3.getString(),db3.getString());
 			comps.put(rc.getId(), rc);
 		}
 		return comps;
@@ -110,7 +118,7 @@ public class RomCompDao {
 
 		Sistem.log.addToSet("romdb-comps", reportRomComp(comps, ';'));
 
-		db3.replaceQuery("insert into romcomp (comptype,schemaname,named,ver,norom,uzanti) " + "values (?,?,?,?,?,?)");
+		db3.replaceQuery("insert into romcomp (comptype,schemaname,named,ver,norom,uzanti,roles,nature,tags) " + "values (?,?,?,?,?,?,?::jsonb,?,?::jsonb)");
 
 		for (Entry<String, RomComp> entry : comps.entrySet()) {
 			db3.setString(entry.getValue().compType);
@@ -119,6 +127,10 @@ public class RomCompDao {
 			db3.setInt(entry.getValue().ver);
 			db3.setBoolean(entry.getValue().noRom);
 			db3.setString(entry.getValue().uzanti);
+			db3.setString(entry.getValue().roles);
+			db3.setString(entry.getValue().nature);
+			db3.setString(entry.getValue().tags);
+			
 			db3.execute();
 			db3.closeResultSet();
 		}

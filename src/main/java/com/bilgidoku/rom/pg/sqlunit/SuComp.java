@@ -2,6 +2,7 @@ package com.bilgidoku.rom.pg.sqlunit;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -24,6 +25,8 @@ public abstract class SuComp {
 	
 	private boolean abstractFunction=false;
 	private String uzanti;
+	
+	
 
 	
 	public String getUzanti() {
@@ -162,5 +165,17 @@ public abstract class SuComp {
 	public boolean isLineBased() {
 		return false;
 	}
-
+	
+	public String getNature() {
+		return null;
+	}
+	public String getHtml() {
+		return null;
+	}
+	public Set<String> getRoles(){
+		return null;
+	}
+	public Set<String> getTags(){
+		return null;
+	}
 }

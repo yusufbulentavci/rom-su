@@ -72,7 +72,7 @@ public class Function  extends SuComp{
 	}
 	@Override
 	public RomComp getComp() {
-		return new RomComp("function", this.schema, named, this.getVersion(), isNoRom(), null, this.dokun);
+		return new RomComp("function", this.schema, named, this.getVersion(), isNoRom(), null, this.dokun, null, null, null);
 	}
 
 	@Override

@@ -42,8 +42,8 @@ public class JsGorevlisi extends GorevliDir {
 	@Override
 	public void kur() {
 		engine = new ScriptEngineManager().getEngineByName("javascript");
-		Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
-		bindings.put("stdout", System.out);
+	//	Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
+	//	bindings.put("stdout", System.out);
 	}
 	
 	private JsGorevlisi() {

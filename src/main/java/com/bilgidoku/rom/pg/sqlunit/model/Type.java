@@ -53,7 +53,7 @@ public class Type extends TypeComp implements CGType{
 
 	@Override
 	public RomComp getComp() {
-		return new RomComp("type", schema, name, this.getVersion(), true, this.getUzanti(), null);
+		return new RomComp("type", schema, name, this.getVersion(), true, this.getUzanti(), null, null, null, null);
 	}
 
 	@Override

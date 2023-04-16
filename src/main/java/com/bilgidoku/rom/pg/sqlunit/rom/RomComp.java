@@ -2,6 +2,7 @@ package com.bilgidoku.rom.pg.sqlunit.rom;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import com.bilgidoku.rom.pg.sqlunit.model.Command;
 
@@ -13,9 +14,13 @@ public class RomComp {
 	public boolean noRom;
 	public String uzanti;
 	private String dokun;
-
+	public String roles;
+	public String nature;
+	public String tags;
+	
+	
 	public RomComp(String compType, String schemaName, String named, int ver, boolean noRom, String uzanti,
-			String dokun) {
+			String dokun, String roles, String nature, String tags) {
 		this.compType = compType;
 		this.schemaName = schemaName;
 		this.named = named;
@@ -23,6 +28,9 @@ public class RomComp {
 		this.noRom = noRom;
 		this.uzanti = uzanti;
 		this.dokun = dokun;
+		this.roles=roles;
+		this.nature=nature;
+		this.tags=tags;
 
 		if (compType.equals("function") && !schemaName.equals("public") && named.startsWith(schemaName + ".")) {
 			this.named = named.substring((schemaName + ".").length());

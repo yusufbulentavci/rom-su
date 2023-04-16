@@ -9,7 +9,7 @@
 		<relativePath>../rom-baslik/pom.xml</relativePath>
 	</parent>
 	<artifactId>rom-su</artifactId>
-	<version>5.0.0</version>
+	<version>5.0.1</version>
 
 	<name>rom-su</name>
 

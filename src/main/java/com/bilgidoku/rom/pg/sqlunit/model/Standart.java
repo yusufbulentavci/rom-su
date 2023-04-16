@@ -50,7 +50,7 @@ public class Standart extends SuComp {
 	@Override
 	public RomComp getComp() {
 
-		return new RomComp(type, schema, nameWithoutSchema, this.getVersion(), this.isNoRom(), this.getUzanti(), null);
+		return new RomComp(type, schema, nameWithoutSchema, this.getVersion(), this.isNoRom(), this.getUzanti(), null, null, null, null);
 	}
 
 	public String getSchema() {

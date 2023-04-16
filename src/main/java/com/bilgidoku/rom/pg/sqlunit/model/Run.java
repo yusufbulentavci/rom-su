@@ -15,7 +15,7 @@ public class Run extends SuComp {
 
 	@Override
 	public boolean isLineBased() {
-		return true;
+		return false;
 	}
 
 	@Override

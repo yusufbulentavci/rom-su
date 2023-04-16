@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+  <classpathentry kind="src" path="src/test/java" output="target/test-classes" including="**/*.java" excluding="**/.svn/**"/>
+  <classpathentry kind="src" path="src/test/resources" output="target/test-classes" excluding="**/*.java"/>
+  <classpathentry kind="src" path="src/main/java" including="**/*.java" excluding="**/.svn/**"/>
+  <classpathentry kind="src" path="src/main/resources" excluding="**/*.java"/>
+  <classpathentry kind="output" path="target/classes"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+  <classpathentry kind="var" path="M2_REPO/com/bilgidoku/rom-min/5.0.0/rom-min-5.0.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/commons-cli/commons-cli/1.4/commons-cli-1.4.jar" sourcepath="M2_REPO/commons-cli/commons-cli/1.4/commons-cli-1.4-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/work/m2/repository/commons-cli/commons-cli/1.4/commons-cli-1.4-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/com/bilgidoku/rom-min-java/5.0.0/rom-min-java-5.0.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/commons-lang/commons-lang/2.6/commons-lang-2.6.jar" sourcepath="M2_REPO/commons-lang/commons-lang/2.6/commons-lang-2.6-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/work/m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/commons-io/commons-io/2.5/commons-io-2.5.jar" sourcepath="M2_REPO/commons-io/commons-io/2.5/commons-io-2.5-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/work/m2/repository/commons-io/commons-io/2.5/commons-io-2.5-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/com/bilgidoku/rom-base/5.0.0/rom-base-5.0.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar" sourcepath="M2_REPO/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/work/m2/repository/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/junit/junit/4.12/junit-4.12.jar" sourcepath="M2_REPO/junit/junit/4.12/junit-4.12-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/work/m2/repository/junit/junit/4.12/junit-4.12-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" sourcepath="M2_REPO/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/work/m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/org/mockito/mockito-core/3.10.0/mockito-core-3.10.0.jar" sourcepath="M2_REPO/org/mockito/mockito-core/3.10.0/mockito-core-3.10.0-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/work/m2/repository/org/mockito/mockito-core/3.10.0/mockito-core-3.10.0-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/net/bytebuddy/byte-buddy/1.11.0/byte-buddy-1.11.0.jar" sourcepath="M2_REPO/net/bytebuddy/byte-buddy/1.11.0/byte-buddy-1.11.0-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/work/m2/repository/net/bytebuddy/byte-buddy/1.11.0/byte-buddy-1.11.0-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/net/bytebuddy/byte-buddy-agent/1.11.0/byte-buddy-agent-1.11.0.jar" sourcepath="M2_REPO/net/bytebuddy/byte-buddy-agent/1.11.0/byte-buddy-agent-1.11.0-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/work/m2/repository/net/bytebuddy/byte-buddy-agent/1.11.0/byte-buddy-agent-1.11.0-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/org/objenesis/objenesis/3.2/objenesis-3.2.jar" sourcepath="M2_REPO/org/objenesis/objenesis/3.2/objenesis-3.2-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/work/m2/repository/org/objenesis/objenesis/3.2/objenesis-3.2-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/org/postgresql/postgresql/42.2.12/postgresql-42.2.12.jar" sourcepath="M2_REPO/org/postgresql/postgresql/42.2.12/postgresql-42.2.12-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/work/m2/repository/org/postgresql/postgresql/42.2.12/postgresql-42.2.12-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-csv/1.8/commons-csv-1.8.jar" sourcepath="M2_REPO/org/apache/commons/commons-csv/1.8/commons-csv-1.8-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/work/m2/repository/org/apache/commons/commons-csv/1.8/commons-csv-1.8-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+</classpath>

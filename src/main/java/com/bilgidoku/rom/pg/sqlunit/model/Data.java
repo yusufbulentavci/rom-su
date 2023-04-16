@@ -104,7 +104,7 @@ public class Data extends SuComp {
 
 	@Override
 	public RomComp getComp() {
-		return new RomComp("data", "public", table + "_" + name, this.getVersion(), true, null, null);
+		return new RomComp("data", "public", table + "_" + name, this.getVersion(), true, null, null, null, null, null);
 	}
 
 	public String getTable() {

@@ -191,7 +191,7 @@ public class Table extends TypeComp implements CGType {
 
 	@Override
 	public RomComp getComp() {
-		return new RomComp("table", this.schema, table, this.getVersion(), isNoRom(), this.getUzanti(), null);
+		return new RomComp("table", this.schema, table, this.getVersion(), isNoRom(), this.getUzanti(), null, null, null, null);
 	}
 
 	public void addMethod(Method method) {
