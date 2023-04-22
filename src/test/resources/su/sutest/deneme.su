@@ -1,0 +1,21 @@
+--@DEPENDS:.base
+
+--@TABLE
+create table sutest.deneme(
+	id bigserial primary key,
+	isim text unique,
+	onek jsonb,
+	email_domain text
+  );
+--@END
+
+
+--@DATA ver=1 table=sutest.deneme name=ilkveriler
+insert into sutest.deneme(isim,onek,email_domain)
+	values
+		('ilk','["bir"]','google.com'),
+		('ikinci','["iki"]','tcdd.org');
+
+--@UPGRADE: 1 delete from sutest.deneme where isim='ilk';
+
+--@END

@@ -168,6 +168,9 @@ public class SqlUnitGorevlisi extends GorevliDir {
 			// syso(command.getCommand().substring(0,29));
 			try {
 				if (command.isSql()) {
+					if (this.dryRun.getValueBoolean()) {
+						System.out.println("DRY-RUN:"+command.getCommand());
+					}
 					rcd.executeCommand(command.getCommand());
 					if (command.getCommand().startsWith("create table dict.envo(")) {
 						rcd.executeCommand("insert into dict.envo(testing)" + " values(" + Ortam.tek().isTest() + ")");
@@ -184,6 +187,7 @@ public class SqlUnitGorevlisi extends GorevliDir {
 			}
 		}
 		if (this.dryRun.getValueBoolean()) {
+			System.out.println("DRY-RUN:ROLLBACK");
 			rcd.rollback();
 			return;
 		}

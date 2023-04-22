@@ -1,17 +1,11 @@
 package com.bilgidoku.rom.pg.sqlunit.parsing;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.bilgidoku.rom.pg.sqlunit.RomDb;
 import com.bilgidoku.rom.pg.sqlunit.SqlUnit;
 import com.bilgidoku.rom.pg.sqlunit.SuComp;
 import com.bilgidoku.rom.pg.sqlunit.SuException;
-import com.bilgidoku.rom.pg.sqlunit.model.Field;
-import com.bilgidoku.rom.pg.sqlunit.model.Type;
-import com.bilgidoku.rom.pg.dict.types.TypeAdapter;
 
 public class TypeParser extends CompParser {
 	public TypeParser(RomDb romDb) {

@@ -10,7 +10,7 @@ public class SuTest {
 
 	public static void main(String[] args) throws KnownError {
 		OrtamInit.test();
-		Ortam.test().iniFile(false, true, "test.ini");
+		Ortam.test().iniFile(false, true, "su-test.ini");
 		SqlUnitGorevlisi.bind(null);
 		GorevliYonetimi.tek().basla();
 	}

@@ -21,7 +21,7 @@ public class RunParser extends CompParser {
 		String name="";
 		trimmedLine = trimmedLine.toLowerCase();
 		boolean utest=false;
-		System.err.println(nextLine);
+//		System.err.println(nextLine);
 		String[] methodTokens = trimmedLine.split("\\s+");
 		for (String string : methodTokens) {
 			if (string.equals("utest")) {

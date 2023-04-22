@@ -1,15 +1,11 @@
 package com.bilgidoku.rom.pg.sqlunit.parsing;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.bilgidoku.rom.pg.dict.types.TypeAdapter;
 import com.bilgidoku.rom.pg.sqlunit.RomDb;
 import com.bilgidoku.rom.pg.sqlunit.SqlUnit;
 import com.bilgidoku.rom.pg.sqlunit.SuComp;
 import com.bilgidoku.rom.pg.sqlunit.SuException;
 import com.bilgidoku.rom.pg.sqlunit.model.Data;
-import com.bilgidoku.rom.pg.sqlunit.model.DataColumn;
 import com.bilgidoku.rom.pg.sqlunit.model.Table;
 
 public class DataParser extends CompParser {
@@ -30,7 +26,6 @@ public class DataParser extends CompParser {
 		String table = "";
 		String name = "";
 		trimmedLine = trimmedLine.toLowerCase();
-		List<DataColumn> dcs = new ArrayList<DataColumn>();
 		boolean utest = false;
 		Table tbl=null;
 		String[] methodTokens = trimmedLine.split("\\s+");
@@ -49,11 +44,9 @@ public class DataParser extends CompParser {
 				name = string.substring("name=".length());
 			} else if (string.equals("utest")) {
 				utest = true;
-			}
-			
+			} 
 		}
 		Data data = new Data(su, true, utest, lineNo);
-		data.setColumns(dcs);
 		data.setName(name);
 		data.setTable(table);
 		data.setVersion(version);

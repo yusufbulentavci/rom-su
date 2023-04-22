@@ -94,6 +94,15 @@ public class VeritabaniGorevlisi extends GorevliDir {
 		} catch (SQLException e) {
 			throw new KnownError("Could not recreate testdb:" + testDb, e);
 		}
+		Connection cc = getConnection(false);
+		Statement ss;
+		try {
+			ss = cc.createStatement();
+			ss.execute("create extension if not exists pgcrypto;");
+			ss.execute("create extension if not exists ltree;");
+		} catch (SQLException e) {
+			throw new KnownError("Could not recreate testdb:" + testDb, e);
+		}
 	}
 
 	@Override
@@ -179,6 +188,7 @@ public class VeritabaniGorevlisi extends GorevliDir {
 			uri=url;
 		}
 
+		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=");
 		System.out.println(uri);
 		
 		Connection connection;

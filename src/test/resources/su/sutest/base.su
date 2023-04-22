@@ -1,0 +1,6 @@
+--@DEPENDS:base
+
+
+--@SCHEMA
+create schema sutest;
+--@END
