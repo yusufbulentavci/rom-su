@@ -134,7 +134,7 @@ end;
 $$ language 'plpgsql';
 --@END
 
---@FUNCTION norom
+--@FUNCTION norom ver=1
 create function check_not_null(p_b anyelement, p_msg text default '') returns boolean
 as
 $$
@@ -157,5 +157,6 @@ select assert_equals(1, 1);
 select assert_equals('1', '1');
 --select assert_equals(1, 1::bigint);
 select check_not_null('dd'::text);
+select check_not_null(1,'');
 select check_null(null::text);
 --@END
