@@ -29,7 +29,7 @@ public class Data extends SuComp {
 
 	@Override
 	public boolean justRun() {
-		return true;
+		return false;
 	}
 
 	public List<Command> getCommands() {

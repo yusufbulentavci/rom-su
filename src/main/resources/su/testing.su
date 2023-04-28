@@ -135,12 +135,12 @@ $$ language 'plpgsql';
 --@END
 
 --@FUNCTION norom
-create function check_not_null(p_b anyelement) returns boolean
+create function check_not_null(p_b anyelement, p_msg text default '') returns boolean
 as
 $$
 begin
   if p_b is null then
-  	RAISE EXCEPTION 'Shouldnt have been null';
+  	RAISE EXCEPTION 'Shouldnt have been null. %', p_msg;
   end if;
   return true;
 end;

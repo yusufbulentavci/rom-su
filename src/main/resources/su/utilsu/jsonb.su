@@ -1,0 +1,45 @@
+--@DEPENDS:.base
+
+
+--@FUNCTION norom
+create function su_jsonb_search_in_top_values(p_json jsonb, p_key text) returns boolean
+as
+$$
+begin
+  if exists (  select * from pg_settings where name='application_name' and setting='rom-test' ) then
+  	return true;
+  end if;
+  
+  return false;
+end;
+$$ language 'plpgsql';
+--@END
+
+
+--@RUN utest
+
+select assert_equals(1, (select 1));
+
+select assert_equals(1, (select count(*) from su_test()));
+
+insert into utilsu.test_dirs (path,filename) values ('/hdfs', 'VTM_masak');
+insert into utilsu.test_dirs (path,filename) values ('/hdfs/VTM_masak', 'NKR_FULL');
+insert into utilsu.test_dirs (path,filename) values ('/hdfs/VTM_masak','20230210_16071676034461');
+insert into utilsu.test_dirs (path,filename) values ('/hdfs/VTM_masak','20230213_17161676297817');
+insert into utilsu.test_dirs (path,filename) values ('/hdfs/VTM_masak/20230213_17161676297817', 'first_NKR_update');
+insert into utilsu.test_dirs (path,filename) values ('/hdfs/VTM_masak/20230213_17161676297817', 'second_NKR_load');
+
+insert into utilsu.test_dirs (path,filename, size, isdir) 
+	values ('/hdfs/VTM_masak/NKR_FULL', 'part-00000-6ba63a88-d38d-4dcf-87f7-cd8c91962d61-c000.csv', 10842647532,false);
+insert into utilsu.test_dirs (path,filename, size, isdir) 
+	values ('/hdfs/VTM_masak/NKR_FULL', 'part-00001-6ba63a88-d38d-4dcf-87f7-cd8c91962d61-c000.csv', 10842647532,false);
+insert into utilsu.test_dirs (path,filename, size, isdir) 
+	values ('/hdfs/VTM_masak/NKR_FULL', '_SUCCESS', 0,false);
+
+select assert_equals(3 ,(select count(*) from utilsu.ls_dir('/hdfs/VTM_masak')));
+
+select assert_true((select isdir from utilsu.stat_file('/hdfs/VTM_masak')));
+
+select assert_equals(10842647532, (select size from utilsu.stat_file('/hdfs/VTM_masak/NKR_FULL/part-00001-6ba63a88-d38d-4dcf-87f7-cd8c91962d61-c000.csv')));
+
+--@END
