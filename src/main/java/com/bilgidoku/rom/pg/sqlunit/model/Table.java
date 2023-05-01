@@ -149,14 +149,9 @@ public class Table extends TypeComp implements CGType {
 		return schema;
 	}
 
-	@Override
-	public String toString() {
-		return "Table [schema=" + schema + ", table=" + table + ", ownerSuper=" + ownerSuper + ", roles=" + roles
-				+ ", methods=" + methods + ", inheritType=" + inheritType + ", uzanti=" + uzanti + ", subContainer="
-				+ subContainer + ", one=" + one + ", net=" + net + ", pks=" + pks + ", cache=" + cache
-				+ ", generatedFields=" + generatedFields + ", checkvisible=" + checkvisible + ",clp="+this.clp + "]";
-	}
-
+	
+	
+	
 	public String getTable() {
 		return table;
 	}
@@ -487,5 +482,14 @@ public class Table extends TypeComp implements CGType {
 
 	public void setOzellik(boolean b) {
 		this.ozellik=true;
+	}
+
+	@Override
+	public String toString() {
+		return "Table [schema=" + schema + ", table=" + table + ", ownerSuper=" + ownerSuper + ", roles=" + roles
+				+ ", methods=" + methods + ", inheritType=" + inheritType + ", uzanti=" + uzanti + ", subContainer="
+				+ subContainer + ", one=" + one + ", net=" + net + ", pks=" + pks + ", cache=" + cache + ", ozellikler="
+				+ ozellikler + ", ozellik=" + ozellik + ", generatedFields=" + generatedFields + ", checkvisible="
+				+ checkvisible + ", name=" + name + ", getVersion()=" + getVersion() + "]";
 	}
 }

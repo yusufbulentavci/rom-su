@@ -41,6 +41,7 @@ public class RomDb {
 //			syso("Table:"+t.getName());
 		}else if(parseComp instanceof Table){
 			Table t=(Table) parseComp;
+			System.out.println(t);
 			Schema s = getSchema(t.getSchema());
 			s.addTable(t);
 		}else if(parseComp instanceof Method){

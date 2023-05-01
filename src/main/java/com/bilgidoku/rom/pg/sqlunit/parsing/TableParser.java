@@ -54,6 +54,7 @@ public class TableParser extends CompParser {
 			
 			Table t = new Table(su, st.getSchema(), st.getNamed(), st.isUnitTest(), lineNo, null, 0, null, null);
 			t.setUzanti(st.getUzanti());
+			t.setVersion(st.getVersion());
 			return t;
 //		}
 //

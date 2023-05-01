@@ -78,7 +78,6 @@ public class Schema extends SuComp {
 	}
 
 	public void addTable(Table t) {
-		System.out.println("$$$$$$$$$$$$$$$$$$"+t.name);
 		tables.put(t.getTable(),t);
 	}
 

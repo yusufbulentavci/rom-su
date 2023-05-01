@@ -229,9 +229,6 @@ public class SqlUnitGorevlisi extends GorevliDir {
 				String sql = command.getCommand();
 				pw.println(sql);
 				if (command.isSql()) {
-					System.out.println("Sql:");
-					System.out.println(sql);
-					System.out.println("Sql:");
 					
 					rcd.executeCommand(sql);
 					if (sql.startsWith("create table dict.envo(")) {
@@ -307,10 +304,15 @@ public class SqlUnitGorevlisi extends GorevliDir {
 //						if (!comp.isNoRes() && !comp.isNoRom() && currentComp.compType.equals("table")) {
 //							allCmds.add(createGetResourceScript(currentComp.schemaName, currentComp.named));
 //						}
-					} else if (oldy.ver != comp.getVersion()) {
-						List<Command> cmds = comp.upgrade(oldy.ver);
-						if (cmds != null && cmds.size() > 0)
-							allCmds.addAll(cmds);
+					} else {
+					//	System.out.println(comp.getComp().named+"-"+oldy.ver+"-"+comp.getVersion()+" "+id);
+						if (oldy.ver != comp.getVersion()) {
+							
+							List<Command> cmds = comp.upgrade(oldy.ver);
+							if (cmds != null && cmds.size() > 0)
+								allCmds.addAll(cmds);
+						}
+						
 					}
 					if (id != null)
 						newComps.put(id, currentComp);
