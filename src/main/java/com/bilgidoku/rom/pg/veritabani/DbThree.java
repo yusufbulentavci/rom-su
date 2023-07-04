@@ -44,7 +44,7 @@ public class DbThree implements AutoCloseable, DbSetGet {
 	private int[] trueFieldList;
 	private static final Astate c1 = mc.c("resultset-close");
 
-	public DbThree(VeritabaniGorevlisi vg, String query) throws KnownError {
+	DbThree(VeritabaniGorevlisi vg, String query) throws KnownError {
 		this.vg=vg;
 		this.query = query;
 		connection = vg.getConnection();

@@ -104,6 +104,10 @@ public class VeritabaniGorevlisi extends GorevliDir {
 			throw new KnownError("Could not recreate testdb:" + testDb, e);
 		}
 	}
+	
+	public DbThree dbThree(String sql) throws KnownError {
+		return new DbThree(this, sql);
+	}
 
 	@Override
 	protected void bitir(boolean dostca) {

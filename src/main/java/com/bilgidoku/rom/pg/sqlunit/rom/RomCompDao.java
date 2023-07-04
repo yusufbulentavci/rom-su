@@ -26,7 +26,7 @@ public class RomCompDao {
 	final DbThree db3;
 
 	public RomCompDao(VeritabaniGorevlisi vg) throws KnownError {
-		db3 = new DbThree(vg,
+		db3 = vg.dbThree(
 				"create table if not exists public.romcomp(" + "comptype text not null," + "schemaname text not null,"
 						+ "named text not null, ver int not null, norom boolean not null, uzanti text, "
 						+ "dokun text, " + "roles jsonb, " + "nature text, " + "tags jsonb, "
